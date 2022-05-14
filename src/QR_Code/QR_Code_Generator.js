@@ -1,6 +1,8 @@
-import { StyleSheet, View, Button, TextInput, Image } from 'react-native'
+import { StyleSheet, View, Button, TextInput, Image, Dimensions } from 'react-native'
 import RNQRGenerator from 'rn-qr-generator'
 import React, { useState } from 'react'
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const QR_Code_Generator = () => {
     const [qrCode, setQrCode] = useState(null);
@@ -8,8 +10,8 @@ const QR_Code_Generator = () => {
     const generateQR_Code = () => {
         RNQRGenerator.generate({
             value: codeText,
-            height: 400,
-            width: 400,
+            height: SCREEN_HEIGHT * 0.6,
+            width: SCREEN_WIDTH * 0.9,
             base64: true,
         }).then((response) => {
             // console.log(' response', response)
@@ -20,7 +22,7 @@ const QR_Code_Generator = () => {
 
         <View style={styles.container} >
             <TextInput
-                style={{ height: 40, width: 300, borderWidth: 1, borderRadius: 10, marginVertical: 20 }}
+                style={styles.textInput}
                 onChangeText={(text) => {
                     setCodeText(text)
                 }}
@@ -37,8 +39,9 @@ const QR_Code_Generator = () => {
 }
 
 const styles = StyleSheet.create({
-    qrcode: { marginTop: 20, width: 400, height: 400 },
+    qrcode: { marginTop: 20, width: '90%', height: '60%' },
     container: { flex: 1, alignItems: "center", justifyContent: "center" },
+    textInput: { height: 44, width: '90%', borderWidth: 1, borderRadius: 8, marginVertical: 20 }
 })
 
 

@@ -1,4 +1,4 @@
-import { StyleSheet, View, Button, TextInput, Image, Dimensions } from 'react-native'
+import { StyleSheet, SafeAreaView, View, Button, TextInput, Image, Dimensions } from 'react-native'
 import RNQRGenerator from 'rn-qr-generator'
 import React, { useState } from 'react'
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -20,7 +20,7 @@ const QR_Code_Generator = () => {
     }
     return (
 
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container} >
             <TextInput
                 style={styles.textInput}
                 onChangeText={(text) => {
@@ -34,7 +34,7 @@ const QR_Code_Generator = () => {
             {qrCode != null &&
                 <Image source={{ uri: qrCode }} style={styles.qrcode} />
             }
-        </View >
+        </SafeAreaView>
     )
 }
 

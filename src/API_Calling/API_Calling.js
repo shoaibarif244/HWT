@@ -100,7 +100,7 @@ const RenderCard = ({ item }) => {
 }
 
 const styles = StyleSheet.create({
-  cardContainer: { backgroundColor: '#004675', width: SCREEN_WIDTH - 20, height: 120, flexDirection: 'row', marginTop: 10, borderRadius: 5, paddingVertical: 5 },
+  cardContainer: { backgroundColor: '#004675', width: SCREEN_WIDTH - 20, height: 120, flexDirection: 'row', marginTop: 10, borderRadius: 10, paddingVertical: 5 },
   leftPortion: { width: '65%', borderRightWidth: 1, borderRightColor: '#fff' },
   rightPortion: { width: '35%', alignItems: 'center', justifyContent: 'center' },
   v1: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 5 },

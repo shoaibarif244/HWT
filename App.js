@@ -8,8 +8,8 @@ import Stripe from './src/PaymentMethod_Stripe/StripePaymentMethod'
 export default function App() {
   return (
     // <QR_Code_Generator />
-    // <QR_Code_Scanner />
+    <QR_Code_Scanner />
     // <API_Calling />
-    <Stripe />
+    // <Stripe />
   )
 }

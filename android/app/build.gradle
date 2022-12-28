@@ -261,6 +261,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-wifi-reborn')
+    
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion

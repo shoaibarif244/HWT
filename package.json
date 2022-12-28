@@ -10,14 +10,22 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/viewpager": "^5.0.11",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-camera": "^4.2.1",
+    "react-native-emoji-board": "^1.2.1",
+    "react-native-image-crop-picker": "^0.38.0",
+    "react-native-image-picker": "^4.10.0",
     "react-native-permissions": "^3.3.1",
+    "react-native-progress": "^5.0.0",
     "react-native-qrcode-scanner": "^1.5.5",
     "react-native-qrcode-svg": "^6.1.2",
     "react-native-svg": "^12.3.0",
-    "rn-qr-generator": "^1.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-wifi-reborn": "^4.7.0",
+    "rn-qr-generator": "^1.2.0",
+    "rn-text-detector": "^0.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

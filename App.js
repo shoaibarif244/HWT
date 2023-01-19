@@ -7,14 +7,16 @@ import Stripe from "./src/PaymentMethod_Stripe/StripePaymentMethod";
 import EmojiPickerKeyboard from "./src/EmojiPickerKeyboard/EmojiPickerKeyboard";
 import OCR from "./src/OCR/OCR";
 import WiFi from "./src/WiFi";
+import RN_PickerModule from "./src/RN_PickerModule";
 export default function App() {
   return (
     // <OCR />
     // <QR_Code_Generator />
     // <QR_Code_Scanner />
-    <WiFi />
+    // <WiFi />
     // <EmojiPickerKeyboard />
     // <API_Calling />
     // <Stripe />
+    <RN_PickerModule />
   );
 }

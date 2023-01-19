@@ -1,87 +1,28 @@
-// import { PermissionsAndroid } from "react-native";
-// import { View, Text } from "react-native";
-// import React, { useEffect } from "react";
-// import WifiManager from "react-native-wifi-reborn";
-
-// const Wifi = () => {
-//   useEffect(() => {
-//     askPermissions();
-//   }, []);
-//   const askPermissions = async () => {
-//     const granted = await PermissionsAndroid.request(
-//       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-//       {
-//         title: "Location permission is required for WiFi connections",
-//         message:
-//           "This app needs location permission as this is required  " +
-//           "to scan for wifi networks.",
-//         buttonNegative: "DENY",
-//         buttonPositive: "ALLOW",
-//       }
-//     );
-//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//       // You can now use react-native-wifi-reborn
-//     } else {
-//       // Permission denied
-//     }
-//   };
-//   WifiManager.connectToProtectedSSID(ssid, password, isWep).then(
-//     () => {
-//       console.log("Connected successfully!");
-//     },
-//     () => {
-//       console.log("Connection failed!");
-//     }
-//   );
-
-//   WifiManager.getCurrentWifiSSID().then(
-//     (ssid) => {
-//       console.log("Your current connected wifi SSID is " + ssid);
-//     },
-//     () => {
-//       console.log("Cannot get current SSID!");
-//     }
-//   );
-//   return (
-//     <View>
-//       <Text>Wifi</Text>
-//     </View>
-//   );
-// };
-
-// export default Wifi;
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { useState, useEffect } from "react";
 import {
+  SafeAreaView,
+  StyleSheet,
+  View,
   PermissionsAndroid,
   Button,
   FlatList,
   TouchableOpacity,
-} from "react-native";
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  StatusBar,
   Text,
+  Alert,
+  Modal,
+  Pressable,
+  TextInput,
 } from "react-native";
-
 import { Header, Colors } from "react-native/Libraries/NewAppScreen";
 import WifiManager from "react-native-wifi-reborn";
 
 const WiFi = () => {
   const [connected, setConnected] = useState({ connected: false, ssid: "S4N" });
   const [ssid, setSsid] = useState("");
-  const password = "React.One";
+  const [password, setPassword] = useState("React.One");
   const [wifiList, setWifiList] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedNetwork, setselectedNetwork] = useState(null);
   const initWifi = async () => {
     try {
       const ssid = await WifiManager.getCurrentWifiSSID();
@@ -119,16 +60,18 @@ const WiFi = () => {
   const connectWithWifi = async () => {
     try {
       const data = await WifiManager.connectToProtectedSSID(
-        ssid,
+        selectedNetwork?.SSID,
         password,
         false
       );
       console.log("Connected successfully!", { data });
-      setConnected({ connected: true, ssid });
+      setConnected({ connected: true, ssid: selectedNetwork?.SSID });
       //   console.log(await WifiManager.getCurrentSignalStrength());
+      setModalVisible(!modalVisible);
     } catch (error) {
       setConnected({ connected: false, error: error.message });
       console.log("Connection failed!", { error });
+      setModalVisible(!modalVisible);
     }
   };
 
@@ -151,46 +94,83 @@ const WiFi = () => {
   }, []);
 
   return (
-    <SafeAreaView>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}
-      >
-        <Header />
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>ssid</Text>
-          <Text style={styles.sectionDescription}>{JSON.stringify(ssid)}</Text>
-        </View>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>
-            Connected : {"\n" + JSON.stringify(connected)}
-          </Text>
-        </View>
-        <Button onPress={connectWithWifi} title="Connect" />
-        <View style={styles.body}>
-          <FlatList
-            data={wifiList}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity
-                  style={{
-                    margin: 6,
-                    padding: 6,
-                    borderRadius: 6,
-                    backgroundColor: index % 2 == 0 ? "#C2C2C2" : "#EBEBEB",
-                  }}
-                >
-                  <Text>SSID: {item?.SSID}</Text>
-                  <Text>BSSID: {item?.BSSID}</Text>
-                  <Text>timestamp: {item?.timestamp}</Text>
-                  <Text>frequency: {item?.frequency} MHz</Text>
-                  {/* <Text>capabilities: {item?.capabilities}</Text> */}
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      {modalVisible && (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                Selected Network: {selectedNetwork?.SSID}
+              </Text>
+              <TextInput
+                placeholder="Password"
+                style={{
+                  width: 150,
+                  borderRadius: 6,
+                  height: 44,
+                  borderWidth: 1,
+                }}
+                // value={password}
+                onChangeText={(text) => setPassword(text)}
+              />
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  connectWithWifi();
+                }}
+              >
+                <Text style={styles.textStyle}>Connect</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      )}
+      {/* <Header /> */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Current Network '{ssid}'</Text>
+      </View>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>
+          Connection Details : {"\n" + JSON.stringify(connected)}
+        </Text>
+      </View>
+      {/* <Button onPress={connectWithWifi} title="Connect" /> */}
+      {/* <View style={styles.body}> */}
+      <FlatList
+        data={wifiList}
+        contentContainerStyle={{ flexGrow: 1 }}
+        renderItem={({ item, index }) => {
+          return (
+            <TouchableOpacity
+              style={{
+                margin: 6,
+                padding: 6,
+                borderRadius: 6,
+                backgroundColor: index % 2 == 0 ? "#C2C2C2" : "#EBEBEB",
+              }}
+              onPress={() => {
+                setModalVisible(true);
+                setselectedNetwork(item);
+                // alert(JSON.stringify(item, 2, 4))
+              }}
+            >
+              <Text>SSID: {item?.SSID}</Text>
+              <Text>BSSID: {item?.BSSID}</Text>
+              <Text>timestamp: {item?.timestamp}</Text>
+              <Text>frequency: {item?.frequency} MHz</Text>
+              {/* <Text>capabilities: {item?.capabilities}</Text> */}
+            </TouchableOpacity>
+          );
+        }}
+      />
+      {/* </View> */}
     </SafeAreaView>
   );
 };
@@ -231,6 +211,48 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingRight: 12,
     textAlign: "right",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00000070",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginTop: 10,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
 

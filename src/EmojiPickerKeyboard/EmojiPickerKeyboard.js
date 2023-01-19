@@ -99,7 +99,7 @@
 //     </View>
 //   );
 // }
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   TextInput,
@@ -109,21 +109,21 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
 // import EmojiSelector, {Categories} from 'react-native-emoji-selector';
-import EmojiBoard from 'react-native-emoji-board';
+import EmojiBoard from "react-native-emoji-board";
 // import EmojiPicker, { EmojiKeyboard } from 'rn-emoji-keyboard';
 
 const EmojiPickerKeyboard = () => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const inputRef = useRef();
 
   const [show, setShow] = useState(false);
   const [isFocus, setisFocus] = useState(false);
 
-  const onClick = emoji => {
-    setText(prev => prev + emoji);
+  const onClick = (emoji) => {
+    setText((prev) => prev + emoji);
   };
 
   //   useEffect(() => {
@@ -135,8 +135,8 @@ const EmojiPickerKeyboard = () => {
   //   }, [isFocus]);
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <ScrollView>
           <Text>red</Text>
         </ScrollView>
@@ -153,7 +153,8 @@ const EmojiPickerKeyboard = () => {
                   setisFocus(false);
                   // inputRef.current.focus()
                   setShow(!show);
-                }}>
+                }}
+              >
                 <Entypo name="emoji-happy" size={24} color={Theme.bluelight} />
               </TouchableOpacity>
             ) : (
@@ -162,20 +163,21 @@ const EmojiPickerKeyboard = () => {
                   setisFocus(true);
                   // inputRef.current.focus()
                   setShow(!show);
-                }}>
+                }}
+              >
                 <Entypo name="keyboard" size={24} color={Theme.bluelight} />
               </TouchableOpacity>
             )}
 
             <TextInput
               placeholder="Type a message"
-              placeholderTextColor={'gray'}
-              style={{color: '#000'}}
+              placeholderTextColor={"gray"}
+              style={{ color: "#000" }}
               ref={inputRef}
               autoFocus={true}
               showSoftInputOnFocus={isFocus}
               value={message}
-              onChangeText={text => setMessage(text)}
+              onChangeText={(text) => setMessage(text)}
               onPressIn={() => {
                 if (!show) {
                   // inputRef.current.focus()
@@ -190,7 +192,7 @@ const EmojiPickerKeyboard = () => {
         </View>
         <View>
           <View>
-            <TouchableOpacity style={{marginLeft: 3}}>
+            <TouchableOpacity style={{ marginLeft: 3 }}>
               <Text>Send</Text>
             </TouchableOpacity>
           </View>
